@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatGPT</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style>
+        #right{
+            float: right;
+        }
+        #save-image-btn{
+            float: right;
+        }
+    </style>
+</head>
+<body >
+<div class="container my-5">
+    <h3>ChatGPT Web🤗</h3>
+    <hr>
+    <div class="my-4"></div>
+    <form id="chat-form">
+        <div class="form-group">
+            <label for="message">请输入消息：</label>
+            <input type="text" id="message" name="message" class="form-control" placeholder="在这里输入你的消息...">
+        </div>
+        <button type="submit" class="btn btn-primary">发送</button>
+        <div class="form-group form-check" id="right">
+            <input type="checkbox" id="context-switch" name="context-switch" class="form-check-input">
+            <label class="form-check-label" for="context-switch">记录聊天记录</label>
+        </div>
+        <br>
+        <div class="mb-3" >
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <h6 class="cent mb-0">Chat-box:</h6>
+                </div>
+                <div class="col-auto">
+                    <button type=button id="save-image-btn" class="btn btn-danger mt-3" style="margin-bottom: 10px">保存为图片</button>
+                </div>
+            </div>
+
+            <div class="container border overflow-auto h-50" style="position:absolute; height:400px; overflow:auto;background-color: white" id="chat-box"></div>
+        </div>
+</div>
+
+<script>
+    $(function () {
+        $('#chat-form').submit(function (event) {
+            event.preventDefault();
+            var message = $('#message').val();
+            var useContext = $('#context-switch').is(':checked');
+            if (!message) {
+                alert('消息不能为空！');
+                return;
+            }
+            $.post('/chat', {message: message, useContext: useContext}, function (data) {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    var dateTime = new Date();
+                    var time = dateTime.toLocaleTimeString();
+                    var mark =marked.parse(data.response).replace(/<\/?p>/g,'');
+                    $('#chat-box').append('<div><h5>('+ time + ')😉： ' + message + '</h5></div>');
+                    $('#chat-box').append('<div><h5>('+ time + ')🤖： ' + mark + '</h5></div>');
+                    $('#message').val('');
+                    $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+                }
+            });
+        });
+    });
+    // 获取保存为图片的按钮元素
+    const saveImageButton = document.getElementById('save-image-btn');
+
+    // 添加按钮的点击事件
+    saveImageButton.addEventListener('click', () => {
+        // 获取要转换为图片的 HTML 元素
+        const element = document.getElementById('chat-box');
+
+        // 将 HTML 元素渲染到 canvas 上
+        html2canvas(element).then(canvas => {
+            // 将 canvas 转换为 base64 编码的数据 URI
+            const dataUrl = canvas.toDataURL();
+
+            // 创建一个新的 a 标签元素，并设置其 href 属性为数据 URI
+            const link = document.createElement('a');
+            link.href = dataUrl;
+
+            // 设置 a 标签的 download 属性，指定文件名为 image.png，可自行更改
+            link.download = 'image.jpg';
+
+            // 将 a 标签添加到文档中，并模拟点击下载链接
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    });
+
+</script>
+
+</body>
+</html>
