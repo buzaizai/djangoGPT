@@ -2453,11 +2453,11 @@
             if (value.type === 18 /* FUNCTION */) {
                 var imageFunction = SUPPORTED_IMAGE_FUNCTIONS[value.name];
                 if (typeof imageFunction === 'undefined') {
-                    throw new Error("Attempting to parse an unsupported image function \"" + value.name + "\"");
+                    throw new Error("Attempting to parse an unsupported images function \"" + value.name + "\"");
                 }
                 return imageFunction(context, value.values);
             }
-            throw new Error("Unsupported image type " + value.type);
+            throw new Error("Unsupported images type " + value.type);
         }
     };
     function isSupportedImage(value) {
@@ -4252,7 +4252,7 @@
         if (!ctx) {
             return false;
         }
-        img.src = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'></svg>";
+        img.src = "data:images/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'></svg>";
         try {
             ctx.drawImage(img, 0, 0);
             canvas.toDataURL();
@@ -4323,7 +4323,7 @@
             var img = new Image();
             img.onload = function () { return resolve(img); };
             img.onerror = reject;
-            img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+            img.src = "data:images/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
         });
     };
     var FEATURES = {
@@ -4559,7 +4559,7 @@
             var bounds = parseBounds(context, img);
             img.setAttribute('width', bounds.width + "px");
             img.setAttribute('height', bounds.height + "px");
-            _this.svg = "data:image/svg+xml," + encodeURIComponent(s.serializeToString(img));
+            _this.svg = "data:images/svg+xml," + encodeURIComponent(s.serializeToString(img));
             _this.intrinsicWidth = img.width.baseVal.value;
             _this.intrinsicHeight = img.height.baseVal.value;
             _this.context.cache.addImage(_this.svg);
@@ -5754,7 +5754,7 @@
                             src = _a.sent();
                             _a.label = 2;
                         case 2:
-                            this.context.logger.debug("Added image " + key.substring(0, 256));
+                            this.context.logger.debug("Added images " + key.substring(0, 256));
                             return [4 /*yield*/, new Promise(function (resolve, reject) {
                                     var img = new Image();
                                     img.onload = function () { return resolve(img); };
@@ -5769,7 +5769,7 @@
                                         setTimeout(function () { return resolve(img); }, 500);
                                     }
                                     if (_this._options.imageTimeout > 0) {
-                                        setTimeout(function () { return reject("Timed out (" + _this._options.imageTimeout + "ms) loading image"); }, _this._options.imageTimeout);
+                                        setTimeout(function () { return reject("Timed out (" + _this._options.imageTimeout + "ms) loading images"); }, _this._options.imageTimeout);
                                     }
                                 })];
                         case 3: return [2 /*return*/, _a.sent()];
@@ -6436,17 +6436,17 @@
         var hasIntrinsicDimensions = hasIntrinsicWidth || hasIntrinsicHeight;
         // If the background-size is auto or auto auto:
         if (isAuto(first) && (!second || isAuto(second))) {
-            // If the image has both horizontal and vertical intrinsic dimensions, it's rendered at that size.
+            // If the images has both horizontal and vertical intrinsic dimensions, it's rendered at that size.
             if (hasIntrinsicWidth && hasIntrinsicHeight) {
                 return [intrinsicWidth, intrinsicHeight];
             }
-            // If the image has no intrinsic dimensions and has no intrinsic proportions,
+            // If the images has no intrinsic dimensions and has no intrinsic proportions,
             // it's rendered at the size of the background positioning area.
             if (!hasIntrinsicProportion && !hasIntrinsicDimensions) {
                 return [bounds.width, bounds.height];
             }
-            // TODO If the image has no intrinsic dimensions but has intrinsic proportions, it's rendered as if contain had been specified instead.
-            // If the image has only one intrinsic dimension and has intrinsic proportions, it's rendered at the size corresponding to that one dimension.
+            // TODO If the images has no intrinsic dimensions but has intrinsic proportions, it's rendered as if contain had been specified instead.
+            // If the images has only one intrinsic dimension and has intrinsic proportions, it's rendered at the size corresponding to that one dimension.
             // The other dimension is computed using the specified dimension and the intrinsic proportions.
             if (hasIntrinsicDimensions && hasIntrinsicProportion) {
                 var width_1 = hasIntrinsicWidth
@@ -6457,13 +6457,13 @@
                     : intrinsicWidth / intrinsicProportion;
                 return [width_1, height_1];
             }
-            // If the image has only one intrinsic dimension but has no intrinsic proportions,
+            // If the images has only one intrinsic dimension but has no intrinsic proportions,
             // it's rendered using the specified dimension and the other dimension of the background positioning area.
             var width_2 = hasIntrinsicWidth ? intrinsicWidth : bounds.width;
             var height_2 = hasIntrinsicHeight ? intrinsicHeight : bounds.height;
             return [width_2, height_2];
         }
-        // If the image has intrinsic proportions, it's stretched to the specified dimension.
+        // If the images has intrinsic proportions, it's stretched to the specified dimension.
         // The unspecified dimension is computed using the specified dimension and the intrinsic proportions.
         if (hasIntrinsicProportion) {
             var width_3 = 0;
@@ -6482,8 +6482,8 @@
             }
             return [width_3, height_3];
         }
-        // If the image has no intrinsic proportions, it's stretched to the specified dimension.
-        // The unspecified dimension is computed using the image's corresponding intrinsic dimension,
+        // If the images has no intrinsic proportions, it's stretched to the specified dimension.
+        // The unspecified dimension is computed using the images's corresponding intrinsic dimension,
         // if there is one. If there is no such intrinsic dimension,
         // it becomes the corresponding dimension of the background positioning area.
         var width = null;
@@ -6553,7 +6553,7 @@
         }
     };
 
-    var SMALL_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    var SMALL_IMAGE = 'data:images/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
     var SAMPLE_TEXT = 'Hidden Text';
     var FontMetrics = /** @class */ (function () {
@@ -6847,7 +6847,7 @@
                             return [3 /*break*/, 8];
                         case 7:
                             _c.sent();
-                            this.context.logger.error("Error loading image " + container.src);
+                            this.context.logger.error("Error loading images " + container.src);
                             return [3 /*break*/, 8];
                         case 8:
                             if (container instanceof CanvasElementContainer) {
@@ -6961,7 +6961,7 @@
                             return [3 /*break*/, 18];
                         case 17:
                             _c.sent();
-                            this.context.logger.error("Error loading list-style-image " + url);
+                            this.context.logger.error("Error loading list-style-images " + url);
                             return [3 /*break*/, 18];
                         case 18: return [3 /*break*/, 20];
                         case 19:
@@ -7172,7 +7172,7 @@
                                             return [3 /*break*/, 4];
                                         case 3:
                                             _h.sent();
-                                            this_1.context.logger.error("Error loading background-image " + url);
+                                            this_1.context.logger.error("Error loading background-images " + url);
                                             return [3 /*break*/, 4];
                                         case 4:
                                             if (image) {
@@ -7606,7 +7606,7 @@
                 resolve(img);
             };
             img.onerror = reject;
-            img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+            img.src = "data:images/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
         });
     };
 
